@@ -1,0 +1,23 @@
+Advanced Deployment Instructions
+================================
+
+Terraform group 'primary' was successfully created in directory cluster-sep-12-bp-staging/primary
+To deploy, run the following commands:
+
+terraform -chdir=cluster-sep-12-bp-staging/primary init
+terraform -chdir=cluster-sep-12-bp-staging/primary validate
+terraform -chdir=cluster-sep-12-bp-staging/primary apply
+
+Destroying infrastructure when no longer needed
+===============================================
+
+Automated
+---------
+
+gcluster destroy cluster-sep-12-bp-staging
+
+Advanced / Manual
+-----------------
+Infrastructure should be destroyed in reverse order of creation:
+
+terraform -chdir=cluster-sep-12-bp-staging/primary destroy

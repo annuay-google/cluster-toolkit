@@ -17,9 +17,10 @@
 blueprint_name: hpc-gke
 
 vars:
-  project_id:  ## Set GCP Project ID Here ##
-  deployment_name: cluster-01
+  project_id: hpc-toolkit-dev-staging
+  deployment_name: cluster-sep-12-bp-staging
   region: us-central1
+  zone: us-central1-ir1
 
 deployment_groups:
 - group: primary
@@ -56,3 +57,36 @@ deployment_groups:
       - Hello World
       node_count: 3
     outputs: [instructions]
+
+terraform_providers:
+  google:
+    source: hashicorp/google
+    version: 5.38.0
+    configuration:
+      project: $(vars.project_id)
+      region: $(vars.region)
+      zone: $(vars.zone)
+      container_custom_endpoint: "https://hpc-toolkit-gke-sandbox-test-container.sandbox.googleapis.com/"
+      compute_custom_endpoint: "https://www.googleapis.com/compute/staging_v1/"
+
+  google-beta:
+    source: hashicorp/google-beta
+    version: 5.38.0
+    configuration:
+      project: $(vars.project_id)
+      region: $(vars.region)
+      zone: $(vars.zone)
+      container_custom_endpoint: "https://hpc-toolkit-gke-sandbox-test-container.sandbox.googleapis.com/"
+      compute_custom_endpoint: "https://www.googleapis.com/compute/staging_v1/"
+
+# Validators required for staging deployments
+validators:
+  - validator: test_zone_exists
+    inputs: {}
+    skip: true
+  - validator: test_zone_in_region
+    inputs: {}
+    skip: true
+  - validator: test_region_exists
+    inputs: {}
+    skip: true

@@ -1,0 +1,43 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: my-job-f643
+  labels:
+    ghpc_blueprint: hpc-gke
+    ghpc_deployment: cluster-sep-12-bp-staging
+    ghpc_module: gke-job-template
+    ghpc_role: compute
+spec:
+  parallelism: 3
+  completions: 3
+  completionMode: Indexed
+  template:
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: cloud.google.com/gke-nodepool
+                operator: In
+                values:
+                - c2-standard-60
+      tolerations:
+      - key: user-workload
+        operator: Equal
+        value: "true"
+        effect: NoSchedule
+      containers:
+      - name: my-job-container
+        image: busybox
+        command:
+        - "echo"
+        - "Hello World"
+        
+        resources:
+          requests:
+            # cpu request attempts full node per pod
+            cpu: 28855m
+      restartPolicy: Never
+  backoffLimit: 0
