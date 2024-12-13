@@ -13,7 +13,7 @@
 # limitations under the License.
 
 blueprint_name: gke-a3-ultra
-ghpc_version: v1.43.0-3-g0a8385bd
+ghpc_version: v1.43.0-4-g14cff51e-dirty
 vars:
   a3ultra_node_pool_disk_size_gb: 100
   authorized_cidr: 0.0.0.0/0
@@ -23,9 +23,7 @@ vars:
   labels:
     ghpc_blueprint: gke-a3-ultra
     ghpc_deployment: ((var.deployment_name))
-  mglru_disable_path: ((ghpc_stage("./mglru-disable.yaml")))
   mtu_size: 8896
-  nccl_installer_path: ((ghpc_stage("./nccl-installer.yaml")))
   project_id: hpc-toolkit-gsc
   region: europe-west1
   static_node_count: 1
@@ -182,49 +180,6 @@ deployment_groups:
           static_node_count: ((var.static_node_count))
           zones:
             - ((var.zone))
-      - source: github.com/GoogleCloudPlatform/cluster-toolkit.git//community/modules/compute/gke-topology-scheduler?ref=e0c690b
-        kind: terraform
-        id: topology-aware-scheduler-install
-        use:
-          - a3-ultragpu-cluster
-        settings:
-          cluster_id: ((module.a3-ultragpu-cluster.cluster_id))
-          project_id: ((var.project_id))
-      - source: github.com/GoogleCloudPlatform/cluster-toolkit.git//modules/management/kubectl-apply?ref=e0c690b
-        kind: terraform
-        id: workload-manager-install
-        use:
-          - a3-ultragpu-cluster
-        settings:
-          apply_manifests:
-            - source: ((var.nccl_installer_path))
-            - source: ((var.mglru_disable_path))
-          cluster_id: ((module.a3-ultragpu-cluster.cluster_id))
-          jobset:
-            install: true
-            version: v0.7.1
-          kueue:
-            install: true
-            version: v0.9.1
-          project_id: ((var.project_id))
-      - source: modules/compute/gke-job-template
-        kind: terraform
-        id: job-template
-        use:
-          - a3-ultragpu-pool
-        outputs:
-          - name: instructions
-        settings:
-          allocatable_cpu_per_node: ((flatten([module.a3-ultragpu-pool.allocatable_cpu_per_node])))
-          command:
-            - nvidia-smi
-          has_gpu: ((flatten([module.a3-ultragpu-pool.has_gpu])))
-          image: nvidia/cuda:11.0.3-runtime-ubuntu20.04
-          labels: ((var.labels))
-          name: run-nvidia-smi
-          node_count: 2
-          node_pool_name: ((flatten([module.a3-ultragpu-pool.node_pool_name])))
-          tolerations: ((flatten([module.a3-ultragpu-pool.tolerations])))
 terraform_backend_defaults:
   type: gcs
   configuration:

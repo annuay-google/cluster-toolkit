@@ -23,8 +23,3 @@ output "instructions_a3-ultragpu-pool" {
   description = "Generated output from module 'a3-ultragpu-pool'"
   value       = module.a3-ultragpu-pool.instructions
 }
-
-output "instructions_job-template" {
-  description = "Generated output from module 'job-template'"
-  value       = module.job-template.instructions
-}

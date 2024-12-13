@@ -44,19 +44,9 @@ variable "labels" {
   type        = any
 }
 
-variable "mglru_disable_path" {
-  description = "Toolkit deployment variable: mglru_disable_path"
-  type        = string
-}
-
 variable "mtu_size" {
   description = "Toolkit deployment variable: mtu_size"
   type        = number
-}
-
-variable "nccl_installer_path" {
-  description = "Toolkit deployment variable: nccl_installer_path"
-  type        = string
 }
 
 variable "project_id" {
