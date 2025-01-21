@@ -144,7 +144,7 @@ deployment_groups:
 
   - id: local-ssd-pool
     source: modules/compute/gke-node-pool
-    use: [gke_cluster, gke_service_account]
+    use: [gke_cluster, node_pool_service_account]
     settings:
       name: local-ssd
       machine_type: n2d-standard-2
