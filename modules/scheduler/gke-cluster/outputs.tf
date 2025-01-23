@@ -94,3 +94,8 @@ output "access_token" {
   description = "Google client config access token."
   value       = data.google_client_config.default.access_token
 }
+
+output "configure_workload_identity_sa" {
+  description = "Workload identity k8s service account"
+  value       = var.configure_workload_identity_sa
+}
