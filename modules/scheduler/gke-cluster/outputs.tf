@@ -67,8 +67,10 @@ output "instructions" {
           --region ${google_container_cluster.gke_cluster.location} \
           --project ${var.project_id}
 
-      Use the following Kubernetes service account in the default namespace to run your workloads
+      Use the following Kubernetes Service Account in the default namespace to run your workloads:
         ${local.k8s_service_account_name}
+      The GCP Service Account mapped to this Kubernetes Service Account is:
+        ${local.sa_email}
     EOT
   )
 }
