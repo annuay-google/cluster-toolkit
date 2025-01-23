@@ -368,7 +368,6 @@ module "workload_identity" {
   name                = "workload-identity-k8-sa"
   gcp_sa_name         = local.sa_email
   project_id          = var.project_id
-  roles               = var.enable_gcsfuse_csi ? ["roles/storage.admin"] : []
 
   # https://github.com/terraform-google-modules/terraform-google-kubernetes-engine/issues/1059
   depends_on = [
