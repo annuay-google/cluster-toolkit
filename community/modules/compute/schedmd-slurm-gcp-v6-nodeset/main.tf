@@ -84,7 +84,7 @@ locals {
     enable_shielded_vm     = var.enable_shielded_vm
     gpu                    = one(local.guest_accelerator)
 
-    labels                    = merge(local.labels, { nodeset_name = local.name })
+    labels                    = merge(local.labels, { ghpc_nodeset = local.name })
     machine_type              = terraform_data.machine_type_zone_validation.output
     advanced_machine_features = var.advanced_machine_features
     metadata                  = local.metadata
